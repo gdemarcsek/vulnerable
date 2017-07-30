@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ ! -d virtualenv ]];
+if [[ ! -d virtualenv ]]; then
     virtualenv virtualenv
 fi
 
