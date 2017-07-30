@@ -8,8 +8,9 @@ import subprocess
 
 app = Flask(__name__)
 
-app.config['UPLOAD_FOLDER'] = 'uploads/'
-app.config['RESULT_FOLDER'] = 'converted/'
+base_dir = os.path.dirname(__file__)
+app.config['UPLOAD_FOLDER'] = base_dir + '/uploads/'
+app.config['RESULT_FOLDER'] = base_dir + '/converted/'
 app.config['ALLOWED_EXTENSIONS'] = set(['mp4', 'avi', 'vmw', 'mkv'])
 
 def allowed_file(filename):
@@ -33,8 +34,10 @@ def upload():
 	output_file_path = os.path.join(app.config['RESULT_FOLDER'], sha1("%s_%s" % (filename, time.time())).hexdigest())
 	file.save(input_file_path)
 	# we will also do this with a vulnerable ffmpeg version...
-        ffmpeg = subprocess.Popen(["ffmpeg", "-i", input_file_path, "-vf", "scale=%s" % (scale_param, output_file_path)], shell=True)
-	ffmpeg_resut = ffmpeg.wait()
+	output_file_path += ".mp4"
+        command = ["ffmpeg", "-i", input_file_path, "-vf", "scale=%s" % scale_param, "-strict", "-2", "-y", output_file_path]
+	print(" ".join(command))
+	ffmpeg_result = subprocess.call(command)
 	if ffmpeg_result == 0:
 		return redirect(url_for('uploaded_file', filename=os.path.basename(output_file_path)))
 	else:
@@ -49,6 +52,7 @@ if __name__ == '__main__':
     app.run(
         host="0.0.0.0",
         port=int("8080"),
-        debug=True
+        debug=True,
+	threaded=True
     )
 
