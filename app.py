@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os
 import time
+import ftplib
 from hashlib import sha1
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
@@ -12,6 +13,9 @@ base_dir = os.path.dirname(__file__)
 app.config['UPLOAD_FOLDER'] = base_dir + '/uploads/'
 app.config['RESULT_FOLDER'] = base_dir + '/converted/'
 app.config['ALLOWED_EXTENSIONS'] = set(['mp4', 'avi', 'vmw', 'mkv'])
+
+def load_config():
+    app.config.from_pyfile('config.cfg')
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -49,10 +53,10 @@ def uploaded_file(filename):
                                filename)
 
 if __name__ == '__main__':
+    load_config()
     app.run(
         host="0.0.0.0",
         port=int("8080"),
         debug=True,
 	threaded=True
     )
-
