@@ -1,2 +1,3 @@
 flask
 gunicorn
+-e git://github.com/gdemarcsek/aalight.git#egg=apparmor_light
