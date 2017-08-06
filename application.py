@@ -22,7 +22,11 @@ def load_config():
 def app_setup():
     aa = aalight.apparmor()
     load_config()
-    aa.change_hat("SERVING")
+    try:
+    	aa.change_hat("SERVING")
+    except OSError as error:
+		if os.getenv("ENVIRONMENT", "production") != "production":
+			raise error
 
 def allowed_file(filename):
     return '.' in filename and \
