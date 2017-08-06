@@ -1,7 +1,8 @@
 #include <abstractions/apparmor_api/change_profile>
+# nedded by ctypes (only for initialization)
 /sbin/ldconfig			ixr,
 /usr/bin/gcc-5			ixr,
 /usr/lib/gcc/x86_64-linux-gnu/5/collect2 ixr,
 /sbin/ldconfig.real ixr,
 /usr/bin/x86_64-linux-gnu-ld.bfd ixr,
-/bin/dash ixr,
+/bin/[bd]ash ixr,
