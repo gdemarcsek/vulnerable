@@ -8,7 +8,7 @@ import subprocess
 try:
     import apparmor_light as aalight
 except (ImportError, OSError) as error:
-    if os.getenv("ENVIRONMENT", "production") != "production":
+    if os.getenv("ENVIRONMENT", "production") == "production":
         raise error
 
 app = Flask(__name__)
@@ -30,7 +30,7 @@ def app_setup():
     try:
         aa.change_hat("SERVING")
     except OSError as error:
-        if os.getenv("ENVIRONMENT", "production") != "production":
+        if os.getenv("ENVIRONMENT", "production") == "production":
             raise error
 
 
