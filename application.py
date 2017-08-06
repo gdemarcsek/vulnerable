@@ -4,7 +4,12 @@ from hashlib import sha1
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 import subprocess
-import apparmor_light as aalight
+
+try:
+    import apparmor_light as aalight
+except (ImportError, OSError) as error:
+    if os.getenv("ENVIRONMENT", "production") != "production":
+        raise error
 
 app = Flask(__name__)
 
