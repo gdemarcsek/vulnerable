@@ -1,0 +1,29 @@
+#include <tunables/global>
+
+profile @{APP_HOME}/virtualenv/bin/gunicorn {
+    #include <abstractions/base>
+    #include <abstractions/apparmor_python>
+    #include <abstractions/gunicorn_app>
+    audit @{APP_HOME}/config.cfg 	r,
+    ^SERVING {
+        #include <abstractions/base>
+        #include <abstractions/gunicorn_app>
+        #include <abstractions/apparmor_api/change_profile>
+        signal receive set = (quit int),
+  	@{APP_HOME}/uploads/* 		rw,
+    	@{APP_HOME}/converted/* 	r,
+  	@{APP_HOME}/templates/*.html 	r,
+    	/usr/bin/ffmpeg 		rpx -> ffmpeg_profile,
+    }
+  }
+
+
+profile ffmpeg_profile {
+    #include <abstractions/base>
+    deny network,
+    /usr/bin/ffmpeg 			rix,
+    @{APP_HOME}/uploads/* 		r,
+    @{APP_HOME}/converted/* 		w,
+    /sys/** 				r,
+    /@{PROC}/@{pid}/** 			r,
+}

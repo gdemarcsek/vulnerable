@@ -1,0 +1,28 @@
+#include <abstractions/python>
+#include <abstractions/user-tmp>
+
+# Network access
+network inet tcp,
+
+# For DNS
+network inet udp,
+/etc/machine-id 			r,
+/etc/mime.types 			r,
+/etc/nsswitch.conf                  r,
+/etc/resolv.conf                    r,
+
+# Python modules
+@{APP_HOME}/*.{py,pyc} 		rl,
+@{APP_HOME}/virtualenv/** 		mr,
+@{APP_HOME}/virtualenv/bin/python 	rix,
+
+# Config files
+audit @{APP_HOME}/config.cfg 	r,
+
+# Misc
+@{PROC}/@{pid}/** 			r,
+/run/uuidd/request 			rw,
+/sys/** 				r,
+
+# Signals
+signal send set = (quit int),
