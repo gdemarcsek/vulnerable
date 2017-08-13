@@ -28,7 +28,7 @@ def app_setup():
     aa = aalight.apparmor()
     load_config()
     try:
-        aa.change_hat("SERVING")
+        aa.change_profile("serve_user_requests")
     except OSError as error:
         if os.getenv("ENVIRONMENT", "production") == "production":
             raise error
