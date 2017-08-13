@@ -1,9 +1,11 @@
+# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 import os
 import time
 from hashlib import sha1
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 import subprocess
+import boto3
 
 try:
     import apparmor_light as aalight
@@ -17,22 +19,28 @@ base_dir = os.path.dirname(__file__)
 app.config['UPLOAD_FOLDER'] = base_dir + '/uploads/'
 app.config['RESULT_FOLDER'] = base_dir + '/converted/'
 app.config['ALLOWED_EXTENSIONS'] = set(['mp4', 'avi', 'vmw', 'mkv'])
-
+s3_client = None
 
 def load_config():
     app.config.from_pyfile('config.cfg')
 
+def create_s3_client():
+    global s3
+    s3 = boto3.client("s3", aws_access_key_id=app.config['AWS_ACCESS_KEY_ID'], aws_secret_access_key=app.config['AWS_SEVRET_ACCESS_KEY'])
+
+def upload_file_to_s3(file_object, target_path):
+    return s3.put_object(ACL='public-read', Body=file_object, Bucket=app.config['S3_BUCKET_NAME'], Key=target_path)
 
 @app.before_first_request
 def app_setup():
     aa = aalight.apparmor()
     load_config()
+    create_s3_client()
     try:
         aa.change_profile("serve_user_requests")
     except OSError as error:
         if os.getenv("ENVIRONMENT", "production") == "production":
             raise error
-
 
 def allowed_file(filename):
     return '.' in filename and \
