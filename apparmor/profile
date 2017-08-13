@@ -5,18 +5,18 @@ profile @{APP_HOME}/virtualenv/bin/gunicorn {
     #include <abstractions/apparmor_python>
     #include <abstractions/gunicorn_app>
     audit @{APP_HOME}/config.cfg 	r,
-    ^SERVING {
-        #include <abstractions/base>
-        #include <abstractions/gunicorn_app>
-        #include <abstractions/apparmor_api/change_profile>
-        signal receive set = (quit int),
-  	@{APP_HOME}/uploads/* 		rw,
-    	@{APP_HOME}/converted/* 	r,
-  	@{APP_HOME}/templates/*.html 	r,
-    	/usr/bin/ffmpeg 		rpx -> ffmpeg_profile,
-    }
-  }
+}
 
+profile serve_user_requests {
+    #include <abstractions/base>
+    #include <abstractions/gunicorn_app>
+    #include <abstractions/apparmor_api/change_profile>
+    signal receive set = (quit int),
+  	@{APP_HOME}/uploads/* 		rw,
+    {APP_HOME}/converted/* 	r,
+  	@{APP_HOME}/templates/*.html 	r,
+    /usr/bin/ffmpeg 		rpx -> ffmpeg_profile,
+}
 
 profile ffmpeg_profile {
     #include <abstractions/base>
