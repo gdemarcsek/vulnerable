@@ -1,21 +1,25 @@
 #include <tunables/global>
 
+@{APP_HOME}=/home/vagrant/vulnerable
+
 profile @{APP_HOME}/virtualenv/bin/gunicorn {
     #include <abstractions/base>
     #include <abstractions/apparmor_python>
     #include <abstractions/gunicorn_app>
     audit @{APP_HOME}/config.cfg 	r,
+    change_profile -> serve_user_requests,
 }
 
 profile serve_user_requests {
-    #include <abstractions/base>
-    #include <abstractions/gunicorn_app>
-    #include <abstractions/apparmor_api/change_profile>
-    signal receive set = (quit int),
-  	@{APP_HOME}/uploads/* 		rw,
-    {APP_HOME}/converted/* 	r,
-  	@{APP_HOME}/templates/*.html 	r,
-    /usr/bin/ffmpeg 		rpx -> ffmpeg_profile,
+	#include <abstractions/base>
+	#include <abstractions/gunicorn_app>
+	#include <abstractions/apparmor_api/change_profile>
+        #deny network (bind, connect) inet, # this would work with apparmor 3.0 (not released yet.)
+	signal receive set = (quit int),
+	@{APP_HOME}/uploads/* 		rw,
+	@{APP_HOME}/converted/* 	r,
+	@{APP_HOME}/templates/*.html 	r,
+	/usr/bin/ffmpeg 		rpx -> ffmpeg_profile,
 }
 
 profile ffmpeg_profile {
