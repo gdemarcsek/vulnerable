@@ -1,4 +1,4 @@
--e git://github.com/gdemarcsek/aalight.git@9667dae7545bd761806cd622ab0ca73ff23f6eb9#egg=apparmor_light
+-e git://github.com/gdemarcsek/aalight.git@80c856b54effa159e7903732883782959a5b80c7#egg=apparmor_light
 click==6.7
 Flask==0.12.2
 gunicorn==19.7.1
