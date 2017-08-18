@@ -22,19 +22,22 @@ app.config['ALLOWED_EXTENSIONS'] = set(['mp4', 'avi', 'vmw', 'mkv'])
 s3_client = None
 
 def load_config():
-    app.config.from_pyfile('config.cfg')
+    app.config.from_pyfile(os.path.join(base_dir, 'config.cfg'))
 
 def create_s3_client():
-    global s3
-    s3 = boto3.client("s3", aws_access_key_id=app.config['AWS_ACCESS_KEY_ID'], aws_secret_access_key=app.config['AWS_SEVRET_ACCESS_KEY'])
+    global s3_client
+    s3_client = boto3.client("s3", aws_access_key_id=app.config['AWS_ACCESS_KEY_ID'], aws_secret_access_key=app.config['AWS_SECRET_ACCESS_KEY'])
 
 def upload_file_to_s3(file_object, target_path):
-    return s3.put_object(ACL='public-read', Body=file_object, Bucket=app.config['S3_BUCKET_NAME'], Key=target_path)
+    return s3_client.put_object(ACL='public-read', Body=file_object, Bucket=app.config['S3_BUCKET_NAME'], Key=target_path)
 
 @app.before_first_request
 def app_setup():
+    print("[*] AppArmor setup...")
     aa = aalight.apparmor()
+    print("[*] Loading config...")
     load_config()
+    print("[*] Creating S3 client...")
     create_s3_client()
     try:
         aa.change_profile("serve_user_requests")
