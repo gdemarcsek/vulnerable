@@ -71,6 +71,8 @@ def upload():
                    output_file_path]
         ffmpeg_result = subprocess.call(command)
         if ffmpeg_result == 0:
+            upload_file_to_s3(open(output_file_path), os.path.basename(output_file_path))
+            os.remove(output_file_path)
             return redirect(url_for('uploaded_file', filename=os.path.basename(output_file_path)))
         else:
             return "Conversion failed", 400
@@ -78,5 +80,6 @@ def upload():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['RESULT_FOLDER'],
-                               filename)
+    bucket_location = s3_client.get_bucket_location(Bucket=app.config['S3_BUCKET_NAME'])
+    object_url = "https://s3-{0}.amazonaws.com/{1}/{2}".format(bucket_location['LocationConstraint'], app.config['S3_BUCKET_NAME'], filename)
+    return redirect(object_url)
