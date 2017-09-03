@@ -22,7 +22,7 @@ app.config['ALLOWED_EXTENSIONS'] = set(['mp4', 'avi', 'vmw', 'mkv'])
 s3_client = None
 
 def load_config():
-    app.config.from_pyfile(os.path.join(base_dir, 'config.cfg'))
+    app.config.from_pyfile(os.path.join(base_dir, 'config.prod.cfg'))
 
 def create_s3_client():
     global s3_client
