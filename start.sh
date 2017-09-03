@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/bash -x
 
-set -euo pipefail
+set -eo pipefail
 CWD="$(dirname $0)"
 
 if [ ! -d "$CWD/virtualenv" ]; then
