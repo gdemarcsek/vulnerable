@@ -3,7 +3,7 @@
 set -euo pipefail
 CWD="$(dirname $0)"
 
-if [[ ! -d "$CWD/virtualenv" ]]; then
+if [ ! -d "$CWD/virtualenv" ]; then
     cd $CWD && virtualenv virtualenv && pip install -r requirements.txt
 fi
 
