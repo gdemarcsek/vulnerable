@@ -4,7 +4,7 @@ set -eo pipefail
 CWD="$(dirname $0)"
 
 if [ ! -d "$CWD/virtualenv" ]; then
-    cd "$CWD" && virtualenv virtualenv
+    cd "$CWD" && virtualenv --system-site-packages virtualenv
 fi
 
 source "$CWD/virtualenv/bin/activate"
