@@ -17,7 +17,7 @@ profile serve_user_requests {
         #deny network (bind, connect) inet, # this would work with apparmor 3.0 (not released yet.)
 	signal receive set = (quit int),
 	@{APP_HOME}/uploads/* 		rw,
-	@{APP_HOME}/converted/* 	r,
+	@{APP_HOME}/converted/* 	rw,
 	@{APP_HOME}/templates/*.html 	r,
 	/usr/bin/ffmpeg 		rpx -> ffmpeg_profile,
 }
