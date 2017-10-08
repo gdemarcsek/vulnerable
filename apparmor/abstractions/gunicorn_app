@@ -10,6 +10,9 @@ network inet udp,
 /etc/mime.types 			r,
 /etc/nsswitch.conf                  r,
 /etc/resolv.conf                    r,
+/etc/host.conf               r, 
+/run/resolvconf/resolv.conf          r,
+/etc/hosts r,
 
 # Python modules
 @{APP_HOME}/*.{py,pyc} 		rl,
