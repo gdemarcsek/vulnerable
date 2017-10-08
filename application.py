@@ -26,7 +26,7 @@ def load_config():
 
 def create_s3_client():
     global s3_client
-    s3_client = boto3.client("s3", aws_access_key_id=app.config['AWS_ACCESS_KEY_ID'], aws_secret_access_key=app.config['AWS_SECRET_ACCESS_KEY'])
+    s3_client = boto3.client("s3", region_name="eu-west-2", aws_access_key_id=app.config['AWS_ACCESS_KEY_ID'], aws_secret_access_key=app.config['AWS_SECRET_ACCESS_KEY'])
 
 def upload_file_to_s3(file_object, target_path):
     return s3_client.put_object(ACL='public-read', Body=file_object, Bucket=app.config['S3_BUCKET_NAME'], Key=target_path)
