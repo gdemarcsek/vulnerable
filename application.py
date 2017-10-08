@@ -8,7 +8,7 @@ import subprocess
 import boto3
 
 try:
-    import apparmor_light as aalight
+    import LibAppArmor
 except (ImportError, OSError) as error:
     if os.getenv("ENVIRONMENT", "production") == "production":
         raise error
@@ -33,14 +33,12 @@ def upload_file_to_s3(file_object, target_path):
 
 @app.before_first_request
 def app_setup():
-    print("[*] AppArmor setup...")
-    aa = aalight.apparmor()
     print("[*] Loading config...")
     load_config()
     print("[*] Creating S3 client...")
     create_s3_client()
     try:
-        aa.change_profile("serve_user_requests")
+        LibAppArmor.aa_change_profile("serve_user_requests")
     except OSError as error:
         if os.getenv("ENVIRONMENT", "production") == "production":
             raise error
