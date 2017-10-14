@@ -26,6 +26,7 @@ audit @{APP_HOME}/config.cfg 	r,
 @{PROC}/@{pid}/** 			r,
 /run/uuidd/request 			rw,
 /sys/** 				r,
+/etc/passwd     r,    # needed by getpwuid() in os.path.expanduser() used by many module loaders including the one in botocore
 
 # Signals
 signal send set = (quit int),
