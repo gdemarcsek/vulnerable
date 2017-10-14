@@ -5,7 +5,6 @@
 
 profile @{APP_HOME}/virtualenv/bin/gunicorn {
     #include <abstractions/base>
-    #include <abstractions/apparmor_python>
     #include <abstractions/gunicorn_app>
     audit @{APP_HOME}/config.cfg 	r,
     audit @{APP_HOME}/config.prod.cfg 	r,
@@ -15,9 +14,7 @@ profile @{APP_HOME}/virtualenv/bin/gunicorn {
 profile serve_user_requests {
 	#include <abstractions/base>
 	#include <abstractions/gunicorn_app>
-	#include <abstractions/apparmor_api/change_profile>
         #deny network (bind, connect) inet, # this would work with apparmor 3.0 (not released yet.)
-	signal receive set = (quit int),
 	@{APP_HOME}/uploads/* 		rw,
 	@{APP_HOME}/converted/* 	rw,
 	@{APP_HOME}/templates/*.html 	r,
