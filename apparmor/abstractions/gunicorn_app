@@ -28,5 +28,6 @@ audit @{APP_HOME}/config.cfg 	r,
 /sys/** 				r,
 /etc/passwd     r,    # needed by getpwuid() in os.path.expanduser() used by many module loaders including the one in botocore
 
-# Signals
-signal send set = (quit int),
+# Signals (between gunicorn parent and child processes)
+signal send set = (quit int term) peer=@{APP_PROFILE_NAME},
+signal receive set = (quit int term) peer=@{APP_PROFILE_NAME},
