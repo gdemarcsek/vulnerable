@@ -1,7 +1,7 @@
 #include <tunables/global>
 
-@{APP_HOME}=/home/vagrant/vulnerable
-@{APP_PROFILE_NAME}=vulnerable
+@{APP_HOME}={{ app_home }}
+@{APP_PROFILE_NAME}={{ profile_name }}
 
 profile @{APP_HOME}/virtualenv/bin/gunicorn {
     #include <abstractions/base>
