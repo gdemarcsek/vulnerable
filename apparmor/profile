@@ -22,6 +22,7 @@ profile serve_user_requests {
 	@{APP_HOME}/converted/* 	rw,
 	@{APP_HOME}/templates/*.html 	r,
 	/usr/bin/ffmpeg 		rpx -> ffmpeg_profile,
+	/usr/{local/,}lib/python{2.7,2.6,2,3}/dist-packages/botocore/vendored/requests/cacert.pem,
 }
 
 profile ffmpeg_profile {
