@@ -7,6 +7,7 @@ profile @{APP_HOME}/virtualenv/bin/gunicorn {
     #include <abstractions/apparmor_python>
     #include <abstractions/gunicorn_app>
     audit @{APP_HOME}/config.cfg 	r,
+    audit @{APP_HOME}/config.prod.cfg 	r,
     change_profile -> serve_user_requests,
 }
 
