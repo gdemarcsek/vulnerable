@@ -11,6 +11,7 @@ source "$CWD/virtualenv/bin/activate"
 
 cd "$CWD"
 pip install -r requirements.txt
-python -s $(which gunicorn) -c gunicorn.conf.py wsgi
 
-exit 0
+export PYTHONNOUSERSITE=1
+export PYTHONUSERBASE=1
+exec gunicorn -c gunicorn.conf.py wsgi
