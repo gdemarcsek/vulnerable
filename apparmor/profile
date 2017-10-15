@@ -24,7 +24,7 @@ profile serve_user_requests {
 
 profile ffmpeg_profile {
     #include <abstractions/base>
-    deny network,
+    #deny network,			# do not deny in complain mode for easier demo, IRL I would leave this here uncommented
     /usr/bin/ffmpeg 			rix,
     @{APP_HOME}/uploads/* 		r,
     @{APP_HOME}/converted/* 		w,
